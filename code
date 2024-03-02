@@ -1,0 +1,246 @@
+// skladanie permutacji.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
+//
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+vector <int> uloz2(vector <int> v, int size, vector <int> wyn)
+{
+
+	
+
+	cout << "\n";
+	int a = v[0];
+	int awsp = -1;
+	for (int i = 0; i < wyn.size(); i++)
+		if (wyn[i] == a)
+			awsp = i;
+	
+	int zap;
+	zap = a;
+	
+	for (int i = 1; i < v.size(); i++)
+	{
+		if (v[i] == 0)
+		{
+		
+			continue;
+		}
+
+		if (i == v.size() - 1)
+		{
+		
+			wyn[awsp] = v[i];
+
+
+			for (int j = 0; j < wyn.size(); j++)
+				if (wyn[j] == v[i] && j != awsp)
+				{
+					wyn[j] = zap;
+					break;
+				}
+			
+			
+
+		}
+		else if (v[i + 1] == 0)
+		{
+		
+			wyn[awsp] = v[i];
+			
+
+			for (int j = 0; j < wyn.size(); j++)
+				if (wyn[j] == v[i] && j != awsp)
+					wyn[j] = zap;
+			
+			
+
+		}
+		else if (v[i - 1] == 0)
+		{
+			zap = v[i];
+			a = v[i];
+			for (int j = 0; j < wyn.size(); j++)
+				if (wyn[j] == a)
+				{
+					awsp = j;
+					break;
+				}
+
+
+			
+		}
+		else
+		{
+		
+			wyn[awsp] = v[i];
+		
+			a = v[i];
+			for (int j = 0; j < wyn.size(); j++)
+				if (wyn[j] == a && j != awsp)
+				{
+					awsp = j;
+					break;
+				}
+
+			
+		}
+
+		
+
+
+	}
+
+	
+
+	return wyn;
+
+}
+vector <int> uloz(vector <int> v, int size, vector <int> wyn)
+{
+	
+	vector <int> base;
+	base.resize(v.size());
+	for (int i = 0; i < v.size(); i++)
+	{
+		
+		if(v[i] != 0)
+		base[i] = wyn[v[i] - 1];
+	
+	}
+	
+	return base;
+
+
+
+
+
+}
+
+
+
+
+vector <int> zbierz()
+{
+	int n = 0;
+
+
+
+	char c;
+	string temp1;
+	cin.get(c);
+	temp1 += c;
+	while (cin.get(c) && c != '\n')
+	{
+		temp1 += c;
+		
+	}
+	
+	stringstream ss;
+	
+	int elz = 0;
+	for (int i = 0; i < temp1.length(); i++)
+	{
+
+		if (temp1[i] == ')')
+		{
+			
+			ss << '0' << " ";
+			elz++;
+		}
+
+		if (isalnum(temp1[i]) && temp1[i] != '(' && temp1[i] != ')' && !isalpha(temp1[i]))
+		{
+			ss << temp1[i] << " ";
+			
+			elz++;
+		}
+		
+	}
+	
+	int temp0;
+	vector<int> dir;
+	
+	for (int i = 1; i < elz; i++)
+	{
+		ss >> temp0;
+		
+		dir.push_back(temp0);
+	}
+	return dir;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	int main()
+{
+		vector <int> base;
+		int sizen;
+		cout << "Entry size of sequence: " << endl;
+		cin >> sizen;
+		sizen++;
+		for (int i = 1; i < sizen; i++)
+			base.push_back(i);
+		
+		bool met1;
+		bool met2 = true;
+		
+		int r = 0;
+		while (r < 1000)
+		{
+			r++;
+			cout << "Entry a permutation (in cycles or standard entry)" << endl;
+			vector <int> dir = zbierz();
+
+			int dirlicz = 0;
+			for (auto el : dir)
+				if (el != 0)
+					dirlicz++;
+				else
+					met2 = false;
+			
+			
+			if (dirlicz == sizen - 1)
+			{
+				met1 = true;
+				
+			}
+			else 
+			{
+				met1 = false;
+			}
+			if(met1 && met2)
+			{
+				base = uloz(dir, sizen, base);
+				
+			}
+			else
+			{
+				
+				vector<int> base1 = uloz2(dir, sizen, base);
+				base = base1;
+			
+			}
+				for (int i = 0; i < base.size(); i++)
+					cout << base[i] << " ";
+				cout << "\n";
+		
+
+		}
+
+
+}
